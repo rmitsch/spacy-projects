@@ -257,8 +257,6 @@ def _write_to_db(
             aliases_for_entities,
         )
     except sqlite3.OperationalError as ex:
-        print(ex.sqlite_errorname)
-        print(ex.sqlite_errorcode)
         print(ex)
         print(ex.args)
         from pprint import pprint
