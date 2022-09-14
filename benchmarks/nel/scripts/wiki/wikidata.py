@@ -247,14 +247,19 @@ def _write_to_db(
         "INSERT OR IGNORE INTO properties_in_entities (property_id, from_entity_id, to_entity_id) VALUES (?, ?, ?)",
         props_in_ents,
     )
-    cur.executemany(
-        """
-        INSERT INTO aliases_for_entities (alias, entity_id, count) VALUES (?, ?, ?)
-        ON CONFLICT (alias, entity_id) DO UPDATE SET
-            count=count + excluded.count 
-        """,
-        aliases_for_entities,
-    )
+    try:
+        cur.executemany(
+            """
+            INSERT INTO aliases_for_entities (alias, entity_id, count) VALUES (?, ?, ?)
+            ON CONFLICT (alias, entity_id) DO UPDATE SET
+                count=count + excluded.count 
+            """,
+            aliases_for_entities,
+        )
+    except sqlite3.OperationalError:
+        from pprint import pprint
+        pprint(aliases_for_entities)
+
     db_conn.commit()
 
 
