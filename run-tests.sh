@@ -37,6 +37,7 @@ else
   mapfile -t dirs < <( git diff --dirstat=files,0 HEAD~1 | sed 's/^[ 0-9.]\+% //g')
 fi
 
+dirs=('benchmarks/nel')
 echo "Running tests in:"
 for dir in "${dirs[@]}"
 do
